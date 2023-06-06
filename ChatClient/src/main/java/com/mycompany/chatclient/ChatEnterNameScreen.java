@@ -4,6 +4,11 @@
  */
 package com.mycompany.chatclient;
 
+import java.awt.Toolkit;
+import java.awt.event.WindowEvent;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -15,9 +20,16 @@ public class ChatEnterNameScreen extends javax.swing.JFrame {
     /**
      * Creates new form ChatEnterNameScreen
      */
-    public ChatEnterNameScreen() {
+    Client client;
+
+    public ChatEnterNameScreen() { //Domain ip yi isaret eden texttir.Temsilidir
         initComponents();
         this.setLocationRelativeTo(null);
+    }
+
+    public void kapa() {
+        WindowEvent closeWindow = new WindowEvent(this, WindowEvent.WINDOW_CLOSING);
+        Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(closeWindow);
     }
 
     /**
@@ -40,7 +52,7 @@ public class ChatEnterNameScreen extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(51, 51, 51));
 
         btn_Connect.setBackground(new java.awt.Color(0, 255, 0));
-        btn_Connect.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btn_Connect.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         btn_Connect.setText("CONNECT");
         btn_Connect.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -109,11 +121,17 @@ public class ChatEnterNameScreen extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_ConnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ConnectActionPerformed
-        if (txtfield_Name.getText().length() > 13) {
-            JOptionPane.showMessageDialog(null, "Please do not write more than 12 letters.");
+
+        if (txtfield_Name.getText().length() < 3 || txtfield_Name.getText().length() > 13) {
+            JOptionPane.showMessageDialog(null, "Please do not write less than 3 letters and more than 12 letters.");
         } else {
-            JOptionPane.showMessageDialog(null, "Name accepted.");
+            String txt_name = txtfield_Name.getText();
+            this.setVisible(false);
+            ChatScreen cScreen = new ChatScreen(txt_name);
+            cScreen.setVisible(true);
+
         }
+
     }//GEN-LAST:event_btn_ConnectActionPerformed
 
     private void txtfield_NameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtfield_NameActionPerformed
@@ -161,6 +179,6 @@ public class ChatEnterNameScreen extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField txtfield_Name;
+    public static javax.swing.JTextField txtfield_Name;
     // End of variables declaration//GEN-END:variables
 }

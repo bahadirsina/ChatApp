@@ -4,18 +4,44 @@
  */
 package com.mycompany.chatclient;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.DefaultListModel;
+import javax.swing.JFileChooser;
+
 /**
  *
  * @author bahad
  */
 public class ChatScreen extends javax.swing.JFrame {
 
+    Client client;
+
     /**
      * Creates new form ChatScreen
      */
-    public ChatScreen() {
+    public static DefaultListModel list_ChatRooms_model = new DefaultListModel();
+    public static DefaultListModel jList_MessagesFromServer_model = new DefaultListModel();
+
+    public ChatScreen(String str) {
+        String name = str;
+        System.out.println(name);
         initComponents();
         this.setLocationRelativeTo(null);
+//            ChatEnterNameScreen scrC = new ChatEnterNameScreen();
+//            scrC.txtfield_Name.getText();
+        this.list_chat.setModel(jList_MessagesFromServer_model);
+        try {
+            int port = 5001;
+            String serverAddress = "127.0.0.1"; // Serverlar bazen ip degerleri ile ifade edilemezler. Domain name ile ifade edilirler.
+            this.client = new Client(serverAddress, port);
+            this.client.Listen();
+
+        } catch (IOException ex) {
+            Logger.getLogger(ChatEnterNameScreen.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -40,7 +66,7 @@ public class ChatScreen extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
-        btn_addChatRoom = new javax.swing.JList<>();
+        list_ChatRooms = new javax.swing.JList<>();
         jLabel2 = new javax.swing.JLabel();
         lbl_chatType = new javax.swing.JLabel();
         btn_addRoom = new javax.swing.JButton();
@@ -59,6 +85,11 @@ public class ChatScreen extends javax.swing.JFrame {
         btn_send.setBackground(new java.awt.Color(0, 255, 0));
         btn_send.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btn_send.setText("SEND");
+        btn_send.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_sendActionPerformed(evt);
+            }
+        });
 
         btn_document.setBackground(new java.awt.Color(0, 255, 0));
         btn_document.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
@@ -72,7 +103,7 @@ public class ChatScreen extends javax.swing.JFrame {
             }
         });
 
-        jPanel2.setBackground(new java.awt.Color(0, 255, 0));
+        jPanel2.setBackground(new java.awt.Color(255, 102, 102));
 
         jScrollPane3.setViewportView(list_onlineFriends);
 
@@ -101,9 +132,9 @@ public class ChatScreen extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jPanel3.setBackground(new java.awt.Color(0, 255, 0));
+        jPanel3.setBackground(new java.awt.Color(102, 204, 255));
 
-        jScrollPane4.setViewportView(btn_addChatRoom);
+        jScrollPane4.setViewportView(list_ChatRooms);
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
         jLabel2.setText("CHAT ROOMS");
@@ -135,7 +166,7 @@ public class ChatScreen extends javax.swing.JFrame {
         lbl_chatType.setForeground(new java.awt.Color(0, 255, 0));
         lbl_chatType.setText("GLOBAL CHAT");
 
-        btn_addRoom.setBackground(new java.awt.Color(0, 255, 0));
+        btn_addRoom.setBackground(new java.awt.Color(102, 204, 255));
         btn_addRoom.setIcon(new javax.swing.ImageIcon("C:\\Users\\bahad\\OneDrive\\Belgeler\\NetBeansProjects\\ChatClient\\src\\main\\java\\com\\mycompany\\chatclient\\images\\add logo.png")); // NOI18N
         btn_addRoom.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -154,16 +185,18 @@ public class ChatScreen extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(28, 28, 28)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 484, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 356, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addContainerGap()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btn_send, javax.swing.GroupLayout.DEFAULT_SIZE, 88, Short.MAX_VALUE)
-                            .addComponent(btn_document, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addComponent(jScrollPane1)
-                    .addComponent(lbl_chatType, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 378, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(btn_send, javax.swing.GroupLayout.DEFAULT_SIZE, 88, Short.MAX_VALUE)
+                                    .addComponent(btn_document, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(lbl_chatType, javax.swing.GroupLayout.PREFERRED_SIZE, 462, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -217,16 +250,32 @@ public class ChatScreen extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_documentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_documentActionPerformed
-        // TODO add your handling code here:
+        JFileChooser chooseFile = new JFileChooser();
+        int res = chooseFile.showOpenDialog(null); // acmak icin dosya secildi
+        if (res == JFileChooser.APPROVE_OPTION) {
+            File file = new File(chooseFile.getSelectedFile().getAbsolutePath());
+        }
     }//GEN-LAST:event_btn_documentActionPerformed
 
     private void btn_addRoomActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_addRoomActionPerformed
-        // TODO add your handling code here:
+        list_ChatRooms.setModel(list_ChatRooms_model);
+        list_ChatRooms_model.addElement(txtfield_roomName.getText());
+        txtfield_roomName.setText(" ");
     }//GEN-LAST:event_btn_addRoomActionPerformed
 
     private void txtfield_roomNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtfield_roomNameActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtfield_roomNameActionPerformed
+
+    private void btn_sendActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_sendActionPerformed
+        try {
+            String message = txtarea_message.getText();
+            this.client.SendMessage(message.getBytes());
+        } catch (IOException ex) {
+            Logger.getLogger(ChatScreen.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }//GEN-LAST:event_btn_sendActionPerformed
 
     /**
      * @param args the command line arguments
@@ -258,13 +307,12 @@ public class ChatScreen extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ChatScreen().setVisible(true);
+//                new ChatScreen(String str).setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JList<String> btn_addChatRoom;
     private javax.swing.JButton btn_addRoom;
     private javax.swing.JButton btn_document;
     private javax.swing.JButton btn_send;
@@ -278,6 +326,7 @@ public class ChatScreen extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JLabel lbl_chatType;
+    private javax.swing.JList<String> list_ChatRooms;
     private javax.swing.JList<String> list_chat;
     private javax.swing.JList<String> list_onlineFriends;
     private javax.swing.JTextArea txtarea_message;
